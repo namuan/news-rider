@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-md_file_name = datetime.now().strftime("%A_%d_%b_%Y.md").lower()
+md_file_name = datetime.now().strftime("news_%A_%d_%b_%Y.md").lower()
 md_file_path = Path("~").expanduser().joinpath(md_file_name)
 
 

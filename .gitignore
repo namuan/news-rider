@@ -15,4 +15,4 @@ exchange-data
 commands.txt
 *.retry
 venv/
-*.md
+news_*.md
