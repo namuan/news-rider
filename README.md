@@ -21,12 +21,15 @@ A python application to fetch links from different sources and generates a markd
 
 * DIGITALOCEAN_ACCESS_TOKEN (Used when provisioning DigitalOcean droplet)
 
-Copy .env.sample to .env and populate with twitter credentials (only if twitter mode is enabled)
+Copy .env.sample to .env and populate with actual values
 
-* CONSUMER_KEY
-* CONSUMER_SECRET
+* CONSUMER_KEY (twitter credentials - only required when sending tweets - not enabled by default)
+* CONSUMER_SECRET 
 * ACCESS_TOKEN_KEY
 * ACCESS_TOKEN_SECRET
+* PUSHOVER_TOKEN ( https://pushover.net - For push notification when the job is finished )
+* PUSHOVER_USER_KEY 
+* GOOGLE_APPLICATION_CREDENTIALS ( Store links in Google Firestore DB )
 
 ##### Setting up News sources
 
