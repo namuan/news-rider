@@ -1,6 +1,6 @@
 # News Rider
 
-A python application to fetch interested feeds from different sources and generates a markdown file (or send tweets).
+A python application to fetch links from different sources and generates a markdown file (or send tweets).
 
 ### Requirements
 
