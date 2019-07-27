@@ -1,0 +1,21 @@
+---
+- name: users
+  src: franklinkim.users
+
+- name: sshd
+  src: willshersystems.sshd
+
+- name: swapfile
+  src: oefenweb.swapfile
+
+- name: ufw
+  src: franklinkim.ufw
+
+- name: ntp
+  src: geerlingguy.ntp
+
+- name: pip3
+  src: geerlingguy.pip
+
+- name: golang
+  src: fubarhouse.golang

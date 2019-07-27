@@ -1,0 +1,55 @@
+- name: Generate SSH key
+  tags:
+    - launch
+  shell: ssh-keygen -b 2048 -t rsa -f ~/.ssh/{{project}} -q -N ""
+  args:
+    creates: ~/.ssh/{{project}}
+
+- name: Adds SSH key to the authentication agent
+  tags:
+    - launch
+  shell: ssh-add -K ~/.ssh/{{project}}
+
+- name: Create DigitalOcean SSH Key
+  digital_ocean:
+    state: present
+    command: ssh
+    name: "{{project}}"
+    ssh_pub_key: "{{ssh_pub_key}}"
+    api_token: "{{digital_ocean_api_token}}"
+  register: digital_ocean_key
+
+- name: Create DigitalOcean Droplet
+  tags:
+    - launch
+  digital_ocean:
+    state: present
+    command: droplet
+    name: "{{project}}"
+    api_token: "{{digital_ocean_api_token}}"
+    size_id: "512mb"
+    region_id: "lon1"
+    image_id: ubuntu-18-04-x64
+    ssh_key_ids: "{{digital_ocean_key.ssh_key.id}}"
+    wait_timeout: 600
+    unique_name: yes
+  when: digital_ocean_key.ssh_key is defined
+  register: digital_ocean_droplet
+
+- name: Wait for host
+  local_action:
+    module: wait_for
+    host: "{{ digital_ocean_droplet.droplet.ip_address }}"
+    port: 22
+    delay: 5
+    timeout: 60
+    state: started
+
+- name: Output Droplet IP
+  debug: msg="Droplet IP is {{ digital_ocean_droplet.droplet.ip_address }}"
+
+- name: Add new host to our inventory
+  add_host:
+    name: "{{digital_ocean_droplet.droplet.ip_address}}"
+    groups: do_group
+  when: digital_ocean_droplet.droplet is defined

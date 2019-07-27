@@ -1,0 +1,7 @@
+Host {{ project }}
+    User {{ (users|first).username }}
+    HostName {{ digital_ocean_droplet.droplet.ip_address }}
+    IdentitiesOnly yes
+    IdentityFile ~/.ssh/{{ project }}
+    UserKnownHostsFile /dev/null
+    StrictHostKeyChecking no

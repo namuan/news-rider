@@ -1,0 +1,31 @@
+- name: Update apt packages
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install dependencies
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  with_items:
+    - python-pip
+    - python3-pip
+    - git
+    - curl
+    - unzip
+    - gcc
+    - findutils
+    - make
+    - rsync
+    - tar
+
+- name: Add the Go bin directory to the PATH environment variable for all users
+  copy:
+    src: go-bin.sh
+    dest: /etc/profile.d
+
+- name: Set GOPATH for all users
+  copy:
+    src: go-path.sh
+    dest: /etc/profile.d

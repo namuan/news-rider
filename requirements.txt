@@ -1,0 +1,8 @@
+peewee
+bs4
+python-dotenv
+tweepy
+colorlog
+requests
+google-cloud-firestore
+firebase-admin

@@ -1,0 +1,53 @@
+- name: Setup DigitalOcean Machine
+  hosts: localhost
+  gather_facts: false
+  tags:
+    - update
+  tasks:
+    - include: ./tasks/digital-ocean.yml
+
+- name: Setup Python for Ansible
+  hosts: do_group
+  remote_user: root
+  gather_facts: false
+
+  tasks:
+    - raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- name: Prepare server
+  hosts: do_group
+  remote_user: root
+
+  tasks:
+    - include: ./tasks/prepare-server.yml
+
+  roles:
+    - { role: users, tags: [users] }
+    - { role: swapfile, tags: [swapfile] }
+    - { role: ntp, tags: [ntp] }
+    - { role: sshd, tags: [sshd] }
+    - { role: pip3, tags: [pip3] }
+    - { role: golang, tags: [golang] }
+
+  vars:
+    - ansible_user_id: "{{ (users|first).username }}"
+
+- name: Setup Admin
+  hosts: do_group
+  remote_user: root
+
+  tasks:
+    - include: ./tasks/setup-admin.yml
+
+- name: Output Droplet IP and SSH Config
+  hosts: localhost
+  gather_facts: false
+  tags:
+    - update
+
+  tasks:
+    - debug: msg="Droplet IP is {{ digital_ocean_droplet.droplet.ip_address }}"
+    - debug: msg="Generating SSH config file at ~/.ssh/config.d/config-{{project}}"
+    - template:
+        src: ssh.config.j2
+        dest: "~/.ssh/config.d/config-{{project}}"

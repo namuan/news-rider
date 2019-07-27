@@ -1,0 +1,25 @@
+---
+project: "{{ lookup('env','PROJECTNAME') }}"
+ssh_pub_key: "{{ lookup('file', '~/.ssh/{{project}}.pub') }}"
+
+swapfile_size: 1GB
+swapfile_swappiness: 10
+swapfile_vfs_cache_pressure: 50
+
+ntp_timezone: Etc/UTC
+ntp_manage_config: true
+
+sshd:
+  PermitRootLogin: no
+  PasswordAuthentication: no
+
+ufw_rules:
+- { port: 22, rule: allow }
+
+ufw_default_forward_policy: ACCEPT
+ufw_logging: full
+ufw_applications:
+- { name: "OpenSSH" }
+ufw_reset: no
+
+pip_package: python3-pip

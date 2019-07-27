@@ -1,0 +1,11 @@
+---
+users:
+  - username: namuan
+    name: N L
+    authorized_keys:
+      - "{{ lookup('file', '~/.ssh/{{project}}.pub') }}"
+    shell: /bin/bash
+    home_create: yes
+    update_password: on_create
+    groups:
+      - root

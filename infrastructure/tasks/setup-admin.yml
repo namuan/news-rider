@@ -1,0 +1,23 @@
+- name: create sudoers.d directory
+  file:
+    path: /etc/sudoers.d
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: set includedir in sudoers
+  lineinfile:
+    dest: /etc/sudoers
+    line: "#includedir /etc/sudoers.d"
+    state: present
+    validate: "/usr/sbin/visudo -cf %s"
+
+- name: create sudoer file for admin
+  template:
+    src: sudoers.d.j2
+    dest: "/etc/sudoers.d/{{ (users|first).username }}"
+    mode: 0440
+    owner: root
+    group: root
+    validate: "/usr/sbin/visudo -cf %s"
